@@ -1,0 +1,8 @@
+*.deb
+coccoc/*
+update.sh
+PKGBUILD.backup
+pkg/
+src/
+*.pkg.tar
+*.pkg.tar.zst

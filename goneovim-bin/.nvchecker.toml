@@ -1,0 +1,5 @@
+[goneovim-bin]
+source = "github"
+github = "akiyosi/goneovim"
+use_max_tag = true
+prefix = "v"
