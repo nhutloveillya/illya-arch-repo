@@ -76,7 +76,7 @@ jobs:
           commit-message: 'chore(aur-sync): sync package sources from AUR'
           branch: aur-sync
           delete-branch: true
-          title: 'AUR sync: cap nhat source cua cac package'
+          title: 'AUR sync: cập nhật source của tất cả các package'
           labels: aur-sync
           body: |
-            ## REPO AUR cá nhân
+            ## không có gì hot
