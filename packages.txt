@@ -14,10 +14,8 @@ msi-ec-dkms-git
 networkmanager-iwd
 nmtui-go
 obs-pipewire-audio-capture
-onlyoffice
 osu-lazer-bin
 osu-mime
-paru
 physlock
 pwvucontrol
 rhythmbox-plugin-tray-icon
@@ -27,6 +25,7 @@ sfml2
 snapper-rollback
 teamviewer
 ventoy
+vscodium
 wezterm-git
 xclicker
 xmousepasteblock
