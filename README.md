@@ -14,7 +14,9 @@ If you just want to install packages that have already been built in this reposi
 
 ### 1. Check CPU compatibility
 
-This repository currently builds packages using the `cachyos/cachyos-v3` Docker image. That means the published binaries are intended for systems that support the `x86-64-v3` instruction set or newer.
+This repository currently uses the generic `cachyos/cachyos` container, but the build configuration inside the workflows is set by downloading a specific CachyOS `makepkg.conf` profile.
+
+At the moment, this repository is configured for `x86-64-v3` optimization by downloading the `docker-makepkg-v3` configuration files. That means the published binaries are intended for systems that support the `x86-64-v3` instruction set or newer.
 
 Before using this repository, make sure your machine supports `x86-64-v3` or higher. If your CPU only supports generic `x86-64`, the packages from this repository may not run correctly on your system.
 
@@ -46,19 +48,64 @@ Want to build your own automated AUR farm? Follow these steps to fork and config
 - Fork this repository to your own GitHub account.
 - Delete any existing package directories you do not need.
 
-### Step 2: Choose the correct Docker image
+### Step 2: Understand how the build target works
 
-This repository currently uses the `cachyos/cachyos-v3` Docker image in the workflows `build-release.yml` and `verify-change.yml`.
+This repository uses the generic `cachyos/cachyos` Docker image in both `build-release.yml` and `verify-change.yml`.
 
-Before running your own AUR farm, review your target machines and adjust the Docker image if needed:
+The actual optimization target is controlled by the downloaded CachyOS `makepkg.conf` profile inside the workflow, not by changing the container image name to `-v3` or `-v4`.
 
-- Use `cachyos/cachyos` if you want generic builds for wider hardware compatibility.
-- Use `cachyos/cachyos-v3` if your target machines support `x86-64-v3`.
-- Use `cachyos/cachyos-v4` if your target machines support `x86-64-v4` or newer.
+By default, the workflows download the `docker-makepkg-v3` profile, which targets `x86-64-v3`.
 
-If you need a different target level, edit the workflow files `build-release.yml` and `verify-change.yml` and replace the image name accordingly.
+### Step 3: Available CachyOS makepkg profiles
 
-### Step 3: Configure Repository Permissions
+CachyOS provides multiple makepkg profiles that you can use by changing the downloaded config URLs:
+
+- `docker-makepkg` for generic builds.
+- `docker-makepkg-v3` for `x86-64-v3` builds.
+- `docker-makepkg-v4` for `x86-64-v4` builds.
+- `docker-makepkg-znver4` for AMD Zen 4 optimized builds.
+
+### Step 4: Customize the workflow files
+
+Update both workflow files:
+
+- `.github/workflows/build-release.yml`
+- `.github/workflows/verify-change.yml`
+
+Keep the container image as:
+
+```yaml
+container:
+  image: cachyos/cachyos
+```
+
+Then modify the `Configure makepkg` step to download the profile you want.
+
+Default `x86-64-v3` example:
+
+```bash
+curl -sLo /etc/makepkg.conf https://raw.githubusercontent.com/CachyOS/docker-makepkg/refs/heads/master/docker-makepkg-v3/makepkg.conf
+mkdir -p /etc/makepkg.conf.d
+curl -sLo /etc/makepkg.conf.d/rust.conf https://raw.githubusercontent.com/CachyOS/docker-makepkg/refs/heads/master/docker-makepkg-v3/rust.conf
+```
+
+To change the build target, replace `docker-makepkg-v3` in both URLs with one of the following:
+
+- `docker-makepkg`
+- `docker-makepkg-v3`
+- `docker-makepkg-v4`
+- `docker-makepkg-znver4`
+
+Examples:
+
+- Use `docker-makepkg` for maximum compatibility across generic machines.
+- Use `docker-makepkg-v3` for systems that support `x86-64-v3`.
+- Use `docker-makepkg-v4` for systems that support `x86-64-v4`.
+- Use `docker-makepkg-znver4` for systems targeting AMD Zen 4.
+
+If you change the optimization target, update this README too so end-users know what CPU level your binaries require.
+
+### Step 5: Configure Repository Permissions
 
 To allow GitHub Actions to build and release packages, you must enable specific workflow permissions:
 
@@ -67,7 +114,7 @@ To allow GitHub Actions to build and release packages, you must enable specific 
 - Check the box that says Allow GitHub Actions to create and approve pull requests.
 - Click Save.
 
-### Step 4: Create a Personal Access Token (PAT)
+### Step 6: Create a Personal Access Token (PAT)
 
 Why is this needed? When the auto-sync bot creates a Pull Request, GitHub's default token prevents other workflows (like the build verification) from triggering to prevent infinite loops. Using your PAT tells GitHub that you authorized the PR, allowing the build checks to run automatically.
 
@@ -79,7 +126,7 @@ Why is this needed? When the auto-sync bot creates a Pull Request, GitHub's defa
 - Click New repository secret.
 - Name it exactly: `MY_PAT_TOKEN` and paste your token into the Secret field. Add it.
 
-### Step 5: Manage Your Packages
+### Step 7: Manage Your Packages
 
 The entire repository is controlled by a single file: `packages.txt`.
 
@@ -90,7 +137,7 @@ The entire repository is controlled by a single file: `packages.txt`.
 
 - Commit the changes to the `main` branch.
 
-### Step 6: Relax and Let it Run
+### Step 8: Relax and Let it Run
 
 - The Sync Workflow runs at a scheduled time. It reads `packages.txt`, pulls the latest PKGBUILDs from the AUR, deletes removed packages, and creates a clean Pull Request.
 - The Verify Workflow automatically triggers on that PR to test-build the packages using paru, ensuring nothing is broken before merging.
@@ -112,7 +159,9 @@ Nếu bạn chỉ muốn cài các gói đã được build sẵn từ repositor
 
 #### 1. Kiểm tra khả năng tương thích CPU
 
-Repository này hiện build package bằng Docker image `cachyos/cachyos-v3`. Điều đó có nghĩa là các gói nhị phân được phát hành được nhắm tới các máy hỗ trợ tập lệnh `x86-64-v3` trở lên.
+Repository này hiện dùng container `cachyos/cachyos` dạng generic, nhưng cấu hình build thực tế trong workflow được quyết định bằng cách tải về một profile `makepkg.conf` của CachyOS.
+
+Hiện tại repository này đang được cấu hình theo mức tối ưu `x86-64-v3` bằng cách tải bộ cấu hình `docker-makepkg-v3`. Điều đó có nghĩa là các gói nhị phân được phát hành được nhắm tới các máy hỗ trợ tập lệnh `x86-64-v3` trở lên.
 
 Trước khi dùng repository này, hãy chắc chắn rằng máy của bạn hỗ trợ `x86-64-v3` hoặc cao hơn. Nếu CPU của bạn chỉ hỗ trợ mức `x86-64` generic, các gói từ repository này có thể không chạy đúng trên hệ thống của bạn.
 
@@ -144,19 +193,64 @@ Nếu bạn muốn tự dựng một hệ thống build AUR tự động cho tà
 - Fork repository này về tài khoản GitHub của bạn.
 - Xóa các thư mục gói có sẵn mà bạn không cần.
 
-#### Bước 2: Chọn Docker image phù hợp
+#### Bước 2: Hiểu cách target build hoạt động
 
-Repository này hiện đang dùng Docker image `cachyos/cachyos-v3` trong hai workflow `build-release.yml` và `verify-change.yml`.
+Repository này dùng Docker image `cachyos/cachyos` trong cả hai workflow `build-release.yml` và `verify-change.yml`.
 
-Trước khi chạy AUR farm của riêng bạn, hãy xem máy đích của bạn thuộc mức nào và chỉnh Docker image cho phù hợp:
+Mức tối ưu thực tế không được quyết định bằng việc đổi tên container image sang `-v3` hay `-v4`, mà được quyết định bởi profile `makepkg.conf` của CachyOS được tải về trong workflow.
 
-- Dùng `cachyos/cachyos` nếu bạn muốn build kiểu generic để tương thích với nhiều phần cứng hơn.
-- Dùng `cachyos/cachyos-v3` nếu máy đích của bạn hỗ trợ `x86-64-v3`.
-- Dùng `cachyos/cachyos-v4` nếu máy đích của bạn hỗ trợ `x86-64-v4` hoặc cao hơn.
+Mặc định, workflow đang tải profile `docker-makepkg-v3`, tương ứng với target `x86-64-v3`.
 
-Nếu cần đổi target, hãy sửa hai file workflow `build-release.yml` và `verify-change.yml`, rồi thay tên image tương ứng.
+#### Bước 3: Các profile makepkg của CachyOS có sẵn
 
-#### Bước 3: Cấu hình quyền cho repository
+CachyOS hiện có nhiều profile makepkg mà bạn có thể dùng bằng cách đổi URL cấu hình được tải về:
+
+- `docker-makepkg` cho build generic.
+- `docker-makepkg-v3` cho build `x86-64-v3`.
+- `docker-makepkg-v4` cho build `x86-64-v4`.
+- `docker-makepkg-znver4` cho build tối ưu cho AMD Zen 4.
+
+#### Bước 4: Cách tùy biến file workflow
+
+Hãy cập nhật cả hai file workflow sau:
+
+- `.github/workflows/build-release.yml`
+- `.github/workflows/verify-change.yml`
+
+Giữ nguyên container image là:
+
+```yaml
+container:
+  image: cachyos/cachyos
+```
+
+Sau đó sửa bước `Configure makepkg` để tải đúng profile bạn muốn.
+
+Ví dụ mặc định cho `x86-64-v3`:
+
+```bash
+curl -sLo /etc/makepkg.conf https://raw.githubusercontent.com/CachyOS/docker-makepkg/refs/heads/master/docker-makepkg-v3/makepkg.conf
+mkdir -p /etc/makepkg.conf.d
+curl -sLo /etc/makepkg.conf.d/rust.conf https://raw.githubusercontent.com/CachyOS/docker-makepkg/refs/heads/master/docker-makepkg-v3/rust.conf
+```
+
+Để đổi target build, hãy thay `docker-makepkg-v3` trong cả hai URL bằng một trong các giá trị sau:
+
+- `docker-makepkg`
+- `docker-makepkg-v3`
+- `docker-makepkg-v4`
+- `docker-makepkg-znver4`
+
+Ví dụ:
+
+- Dùng `docker-makepkg` nếu muốn tương thích rộng kiểu generic.
+- Dùng `docker-makepkg-v3` nếu muốn target `x86-64-v3`.
+- Dùng `docker-makepkg-v4` nếu muốn target `x86-64-v4`.
+- Dùng `docker-makepkg-znver4` nếu muốn tối ưu cho AMD Zen 4.
+
+Nếu bạn thay target tối ưu, hãy sửa luôn README này để người dùng cuối biết binary của repo yêu cầu mức CPU nào.
+
+#### Bước 5: Cấu hình quyền cho repository
 
 Để GitHub Actions có thể build và phát hành gói, bạn cần bật đúng quyền cho workflow:
 
@@ -165,7 +259,7 @@ Nếu cần đổi target, hãy sửa hai file workflow `build-release.yml` và 
 - Tích vào ô **Allow GitHub Actions to create and approve pull requests**.
 - Nhấn **Save**.
 
-#### Bước 4: Tạo Personal Access Token (PAT)
+#### Bước 6: Tạo Personal Access Token (PAT)
 
 Vì sao cần bước này? Khi bot auto-sync tạo Pull Request, token mặc định của GitHub sẽ chặn việc kích hoạt các workflow khác (ví dụ workflow verify build) để tránh vòng lặp vô hạn. Khi dùng PAT của bạn, GitHub hiểu rằng PR đó được bạn cho phép, nên các build check có thể chạy tự động.
 
@@ -177,7 +271,7 @@ Vì sao cần bước này? Khi bot auto-sync tạo Pull Request, token mặc đ
 - Chọn **New repository secret**.
 - Đặt tên chính xác là `MY_PAT_TOKEN` rồi dán token vào ô Secret.
 
-#### Bước 5: Quản lý danh sách gói
+#### Bước 7: Quản lý danh sách gói
 
 Toàn bộ repository này được điều khiển bởi một file duy nhất là `packages.txt`.
 
@@ -188,7 +282,7 @@ Toàn bộ repository này được điều khiển bởi một file duy nhất 
 
 - Commit thay đổi vào branch `main`.
 
-#### Bước 6: Để hệ thống tự chạy
+#### Bước 8: Để hệ thống tự chạy
 
 - **Sync Workflow** sẽ chạy theo lịch, đọc `packages.txt`, kéo PKGBUILD mới nhất từ AUR, xóa gói đã bị loại bỏ, rồi tạo một Pull Request sạch.
 - **Verify Workflow** sẽ tự kích hoạt trên Pull Request đó để test-build gói bằng `paru`, giúp kiểm tra trước khi merge.
