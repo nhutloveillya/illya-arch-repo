@@ -3,9 +3,7 @@ catppuccin-fcitx5-git
 catppuccin-obs-theme-git
 catppuccin-whiskers-bin
 equicord-installer-bin
-guile1.8
 icu74
-libgraph
 lightworks
 localsend
 lua-pam-git
@@ -21,7 +19,6 @@ pwvucontrol
 rhythmbox-plugin-tray-icon
 ripdrag
 rustdesk
-sfml2
 snapper-rollback
 teamviewer
 ventoy
