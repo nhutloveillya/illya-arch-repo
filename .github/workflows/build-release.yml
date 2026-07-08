@@ -120,16 +120,19 @@ jobs:
             fi
 
             echo "Building $dir with paru"
-            if sudo -u builder bash -lc "cd '$GITHUB_WORKSPACE/$dir' && paru --noconfirm --skipreview --useask --removemake --nocheck -B '$GITHUB_WORKSPACE/$dir'" >/tmp/build-"$dir".log 2>&1; then
-              find "$dir" -maxdepth 1 -name '*.pkg.tar.zst' -exec mv -f {} output/ \;
-              pacman -Sy --noconfirm >/dev/null 2>&1 || true
+            sudo -u builder bash -lc "cd '$GITHUB_WORKSPACE/$dir' && paru --noconfirm --skipreview --useask --removemake --nocheck -B '$GITHUB_WORKSPACE/$dir'" >/tmp/build-"$dir".log 2>&1 || true
+            
+            if ls "$dir"/*.pkg.tar.zst >/dev/null 2>&1; then
+              mv "$dir"/*.pkg.tar.zst output/
               BUILT+=("$dir")
+              echo "Build OK: $dir"
             else
               echo "Build failed for $dir"
-              tail -n 120 /tmp/build-"$dir".log || true
+              tail -n 250 /tmp/build-"$dir".log || true
               FAILED+=("$dir")
             fi
             sudo -u builder rm -rf "$GITHUB_WORKSPACE/$dir/src" "$GITHUB_WORKSPACE/$dir/pkg"
+            pacman -Sy --noconfirm >/dev/null 2>&1 || true
           done
 
           echo "built=${BUILT[*]}" >> "$GITHUB_OUTPUT"
@@ -147,8 +150,7 @@ jobs:
           fi
 
           if [[ ${#FAILED[@]} -gt 0 ]]; then
-             echo "Some packages failed to build."
-             exit 1
+             echo "Some packages failed to build, but continuing to publish successful ones."
           fi
 
       - name: Generate fresh pacman database
