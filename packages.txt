@@ -1,3 +1,5 @@
+#####
+# AUR packages
 all-contributors-cli
 catppuccin-fcitx5-git
 catppuccin-obs-theme-git
@@ -26,3 +28,7 @@ vscodium
 wezterm-git
 xclicker
 xmousepasteblock
+
+#####
+# Local packages
+local:linux-nanoka

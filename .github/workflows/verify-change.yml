@@ -137,14 +137,13 @@ jobs:
           for dir in "${packages[@]}"; do
             [[ -n "$dir" ]] || continue
             echo "Building $dir with paru"
-            sudo -u builder bash -lc "cd '$GITHUB_WORKSPACE' && paru --noconfirm --skipreview --useask --removemake --nocheck -B '$GITHUB_WORKSPACE/$dir'" >/tmp/build-"$dir".log 2>&1 || true
+            sudo -u builder bash -lc "cd '$GITHUB_WORKSPACE' && paru --noconfirm --skipreview --useask --removemake --nocheck -B '$GITHUB_WORKSPACE/$dir'" || true
             
             if ls "$GITHUB_WORKSPACE/$dir"/*.pkg.tar.zst >/dev/null 2>&1; then
               BUILT+=("$dir")
               echo "Build OK: $dir"
             else
               echo "Build failed for $dir"
-              tail -n 250 /tmp/build-"$dir".log || true
               FAILED+=("$dir")
             fi
             sudo -u builder rm -rf "$GITHUB_WORKSPACE/$dir/src" "$GITHUB_WORKSPACE/$dir/pkg"
