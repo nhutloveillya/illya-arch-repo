@@ -30,5 +30,31 @@ xclicker
 xmousepasteblock
 
 #####
+# Xlibre packages
+xlibre-video-voodoo
+xlibre-video-vmware
+xlibre-video-vesa
+xlibre-video-sisusb
+xlibre-video-qxl
+xlibre-video-nouveau
+xlibre-video-intel
+xlibre-video-fbdev
+xlibre-video-dummy
+xlibre-video-ati
+xlibre-video-amdgpu
+xlibre-input-void
+xlibre-input-vmmouse
+xlibre-input-synaptics
+xlibre-input-evdev
+xlibre-input-elographics
+xlibre-xserver
+xlibre-input-wacom
+xlibre-input-libinput
+xlibre-meta
+xlibre-xorgxrdp-nvidia
+xlibre-xorgxrdp-glamor
+xlibre-xorgxrdp
+
+#####
 # Local packages
 local:linux-nanoka
