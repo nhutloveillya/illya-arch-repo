@@ -89,14 +89,6 @@ jobs:
              tar -xzf "cache/${REPO_DB_NAME}.files.tar.gz" -C /tmp/repo-files 2>/dev/null || true
           fi
 
-      - name: Download pre-built packages from Verify workflow
-        uses: actions/download-artifact@v8
-        continue-on-error: true
-        with:
-          pattern: pre-built-aur-packages-*
-          path: cache/
-          merge-multiple: true
-
       - name: Build and filter current packages
         id: build
         run: |
