@@ -100,19 +100,7 @@ To allow GitHub Actions to build and release packages, you must enable specific 
 - Check the box that says Allow GitHub Actions to create and approve pull requests.
 - Click Save.
 
-### Step 6: Create a Personal Access Token (PAT)
-
-Why is this needed? When the auto-sync bot creates a Pull Request, GitHub's default token prevents other workflows (like the build verification) from triggering to prevent infinite loops. Using your PAT tells GitHub that you authorized the PR, allowing the build checks to run automatically.
-
-- Go to your personal GitHub Settings (top right profile picture) > Developer settings > Personal access tokens > Tokens (classic).
-- Click Generate new token (classic).
-- Give it a note (e.g., Arch Repo Sync), set an expiration, and check the repo scope.
-- Generate and copy the token (it starts with `ghp_`...).
-- Go back to your Repository Settings > Secrets and variables > Actions.
-- Click New repository secret.
-- Name it exactly: `MY_PAT_TOKEN` and paste your token into the Secret field. Add it.
-
-### Step 7: Manage Your Packages
+### Step 6: Manage Your Packages
 
 The entire repository is controlled by a single file: `packages.txt`.
 
@@ -124,7 +112,7 @@ The entire repository is controlled by a single file: `packages.txt`.
 
 - Commit the changes to the `main` branch.
 
-### Step 8: Relax and Let it Run
+### Step 7: Relax and Let it Run
 
 - The Sync Workflow runs on a schedule and when `packages.txt` changes. It reads `packages.txt`, pulls the latest PKGBUILDs from the AUR, skips `local:` entries, deletes removed packages, and creates a clean Pull Request.
 - The Verify Workflow automatically triggers on push or pull request and test-builds changed packages using `paru`.
@@ -232,19 +220,7 @@ Trong ví dụ trên:
 - Tích vào ô **Allow GitHub Actions to create and approve pull requests**.
 - Nhấn **Save**.
 
-#### Bước 6: Tạo Personal Access Token (PAT)
-
-Vì sao cần bước này? Khi bot auto-sync tạo Pull Request, token mặc định của GitHub sẽ chặn việc kích hoạt các workflow khác (ví dụ workflow verify build) để tránh vòng lặp vô hạn. Khi dùng PAT của bạn, GitHub hiểu rằng PR đó được bạn cho phép, nên các build check có thể chạy tự động.
-
-- Vào GitHub cá nhân của bạn (ảnh đại diện góc trên phải) > `Developer settings` > `Personal access tokens` > `Tokens (classic)`.
-- Chọn **Generate new token (classic)**.
-- Đặt tên dễ nhớ (ví dụ: `Arch Repo Sync`), chọn thời hạn hết hạn, rồi cấp quyền `repo`.
-- Tạo token và sao chép lại token đó (thường bắt đầu bằng `ghp_`...).
-- Quay lại repository của bạn tại `Settings > Secrets and variables > Actions`.
-- Chọn **New repository secret**.
-- Đặt tên chính xác là `MY_PAT_TOKEN` rồi dán token vào ô Secret.
-
-#### Bước 7: Quản lý danh sách gói
+#### Bước 6: Quản lý danh sách gói
 
 Toàn bộ repository này được điều khiển bởi một file duy nhất là `packages.txt`.
 
@@ -256,7 +232,7 @@ Toàn bộ repository này được điều khiển bởi một file duy nhất 
 
 - Commit thay đổi vào branch `main`.
 
-#### Bước 8: Để hệ thống tự chạy
+#### Bước 7: Để hệ thống tự chạy
 
 - **Sync Workflow** chạy theo lịch và khi `packages.txt` thay đổi. Workflow này đọc `packages.txt`, kéo PKGBUILD mới nhất từ AUR, bỏ qua các dòng `local:`, xóa các gói đã bị loại bỏ, rồi tạo một Pull Request sạch.
 - **Verify Workflow** sẽ tự kích hoạt trên push hoặc pull request và test-build các gói thay đổi bằng `paru`.
