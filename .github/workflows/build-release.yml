@@ -111,6 +111,7 @@ jobs:
             fi
 
             EXPECTED_PKGS=$(sudo -u builder bash -lc "cd '$GITHUB_WORKSPACE/$dir' && makepkg --packagelist 2>/dev/null" || true)
+            EXPECTED_PKGS="${EXPECTED_PKGS//:/.}"
 
             NEEDS_BUILD=false
             if [[ -z "$EXPECTED_PKGS" ]]; then
