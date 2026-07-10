@@ -160,7 +160,7 @@ jobs:
              echo "$PKG" > output/status-skipped-$PKG.txt
           else
              echo "Building $PKG with paru"
-             sudo -u builder bash -lc "cd '$GITHUB_WORKSPACE/$PKG' && paru --noconfirm --skipreview --useask --removemake --nocheck -B '$GITHUB_WORKSPACE/$PKG'" >/tmp/build.log 2>&1 || true
+             sudo -u builder bash -lc "cd '$GITHUB_WORKSPACE/$PKG' && paru --noconfirm --skipreview --useask --removemake --nocheck -B '$GITHUB_WORKSPACE/$PKG'" || true
              
              if ls "$PKG"/*.pkg.tar.zst >/dev/null 2>&1; then
                mv "$PKG"/*.pkg.tar.zst output/
@@ -168,7 +168,6 @@ jobs:
                echo "$PKG" > output/status-built-$PKG.txt
              else
                echo "Build failed for $PKG"
-               tail -n 250 /tmp/build.log || true
 
                echo "Triggering fallback mechanism for $PKG..."
                FALLBACK_SUCCESS=false
