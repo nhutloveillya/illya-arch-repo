@@ -9,6 +9,7 @@ obs-pipewire-audio-capture
 onlyoffice
 pacman
 paru
+yay
 pwvucontrol
 rate-mirrors
 snapper-rollback
