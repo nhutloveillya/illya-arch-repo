@@ -96,7 +96,7 @@ jobs:
 
           cat <<EOF >> /etc/pacman.conf
 
-          [nanoka]
+          [illya]
           SigLevel = Optional TrustAll
           Server = https://github.com/${{ github.repository }}/releases/download/$RELEASE_TAG
           EOF
