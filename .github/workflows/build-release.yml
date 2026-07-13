@@ -100,7 +100,7 @@ jobs:
           SigLevel = Optional TrustAll
           Server = https://github.com/${{ github.repository }}/releases/download/$RELEASE_TAG
           EOF
-          pacman -Sy
+          pacman -Sy || true
 
       - name: Checkout repository
         uses: actions/checkout@v7
