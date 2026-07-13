@@ -1,32 +1,16 @@
 #####
 # AUR packages
-all-contributors-cli
-catppuccin-fcitx5-git
-catppuccin-obs-theme-git
-catppuccin-whiskers-bin
+noctalia-git
 equicord-installer-bin
-icu74
-ksuperkey
-lightworks
 localsend
-lua-pam-git
-luajit-lgi
-msi-ec-dkms-git
 networkmanager-iwd
 nmtui-go
 obs-pipewire-audio-capture
 onlyoffice
-osu-lazer-bin
-osu-mime
 pacman
 paru
-physlock
 pwvucontrol
 rate-mirrors
-rhythmbox-plugin-tray-icon
-ripdrag
-rustdesk
-scx-manager
 snapper-rollback
 teamviewer
 ventoy
@@ -36,32 +20,5 @@ xclicker
 xmousepasteblock
 
 #####
-# Xlibre packages
-xlibre-video-voodoo
-xlibre-video-vmware
-xlibre-video-vesa
-xlibre-video-sisusb
-xlibre-video-qxl
-xlibre-video-nouveau
-xlibre-video-intel
-xlibre-video-fbdev
-xlibre-video-dummy
-xlibre-video-ati
-xlibre-video-amdgpu
-xlibre-input-void
-xlibre-input-vmmouse
-xlibre-input-synaptics
-xlibre-input-evdev
-xlibre-input-elographics
-xlibre-xserver
-xlibre-input-wacom
-xlibre-input-libinput
-xlibre-meta
-xlibre-xorgxrdp-nvidia
-xlibre-xorgxrdp-glamor
-xlibre-xorgxrdp
-
-#####
 # Local packages
-local:linux-nanoka
-local:mcontrolcenter-git
+# local:
