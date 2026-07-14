@@ -9,6 +9,7 @@ obs-pipewire-audio-capture
 onlyoffice
 pacman
 paru
+polymc
 yay
 pwvucontrol
 rate-mirrors
@@ -19,7 +20,6 @@ vscodium
 wezterm-git
 xclicker
 xmousepasteblock
-polymc
 
 #####
 # Local packages
