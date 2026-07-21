@@ -1,25 +1,14 @@
 #####
 # AUR packages
 noctalia-git
-equicord-installer-bin
 localsend
-networkmanager-iwd
-nmtui-go
 obs-pipewire-audio-capture
 onlyoffice
-pacman
-paru
 polymc
-yay
-pwvucontrol
 rate-mirrors
-snapper-rollback
 teamviewer
 ventoy
 vscodium
-wezterm-git
-xclicker
-xmousepasteblock
 
 #####
 # Local packages
